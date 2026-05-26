@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ProcesadorCorreosPYS.Application/ProcesadorCorreosPYS.Application.csproj" />
+    <Project Path="src/ProcesadorCorreosPYS.Domain/ProcesadorCorreosPYS.Domain.csproj" />
+    <Project Path="src/ProcesadorCorreosPYS.Infrastructure/ProcesadorCorreosPYS.Infrastructure.csproj" />
+    <Project Path="src/ProcesadorCorreosPYS.Wpf/ProcesadorCorreosPYS.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ProcesadorCorreosPYS.Tests/ProcesadorCorreosPYS.Tests.csproj" />
+  </Folder>
+</Solution>
