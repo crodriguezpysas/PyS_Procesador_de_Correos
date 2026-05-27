@@ -2,7 +2,9 @@ using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProcesadorCorreosPYS.Application.Abstractions;
 using ProcesadorCorreosPYS.Infrastructure;
+using ProcesadorCorreosPYS.Wpf.Logging;
 using ProcesadorCorreosPYS.Wpf.ViewModels;
 using Serilog;
 
@@ -15,9 +17,10 @@ public partial class App : System.Windows.Application
     public App()
     {
         _host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration((_, config) =>
+            .ConfigureAppConfiguration((context, config) =>
             {
                 config.AddJsonFile("appsettings.json", optional: true)
+                      .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true)
                       .AddJsonFile("appsettings.example.json", optional: true)
                       .AddEnvironmentVariables();
             })
@@ -29,6 +32,8 @@ public partial class App : System.Windows.Application
             .ConfigureServices((context, services) =>
             {
                 services.AddInfrastructure(context.Configuration);
+                services.AddSingleton<ObservableLogSink>();
+                services.AddSingleton<ILogSink>(sp => sp.GetRequiredService<ObservableLogSink>());
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
             })
