@@ -253,15 +253,15 @@ public sealed class EmailProcessorService(
                 await File.WriteAllBytesAsync(targetPath, content, cancellationToken);
                 return;
             }
-            catch (Exception ex) when (attempt < 3)
+            catch (Exception) when (attempt < 3)
             {
-                incidents.Add($"Reintento adjunto {Path.GetFileName(targetPath)} intento {attempt}: {ex.Message}");
+                incidents.Add($"Reintento adjunto {Path.GetFileName(targetPath)} intento {attempt}");
                 await Task.Delay(TimeSpan.FromMilliseconds(150 * attempt), cancellationToken);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                incidents.Add($"Fallo adjunto {Path.GetFileName(targetPath)}: {ex.Message}");
-                logger.LogError(ex, "Error guardando adjunto {Attachment}", Path.GetFileName(targetPath));
+                incidents.Add($"Fallo adjunto {Path.GetFileName(targetPath)}");
+                logger.LogError("Error guardando adjunto {Attachment}", Path.GetFileName(targetPath));
             }
         }
     }

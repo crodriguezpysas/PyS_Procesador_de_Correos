@@ -21,7 +21,7 @@ public sealed class ExcelService : IExcelService
 
     public ValueTask ExportAlternativoIncrementalAsync(string excelPath, IReadOnlyCollection<ProcessedEmailRecord> rows, CancellationToken cancellationToken = default)
     {
-        Export(excelPath, "Automatico", rows, true, _clock.Now);
+        Export(excelPath, "Automático", rows, true, _clock.Now);
         return ValueTask.CompletedTask;
     }
 
