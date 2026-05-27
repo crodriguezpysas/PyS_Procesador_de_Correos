@@ -1,0 +1,6 @@
+namespace ProcesadorCorreosPYS.Application.Abstractions;
+
+public interface IClock
+{
+    DateTimeOffset Now { get; }
+}

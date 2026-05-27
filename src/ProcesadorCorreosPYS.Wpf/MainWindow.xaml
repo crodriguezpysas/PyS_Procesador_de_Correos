@@ -1,0 +1,103 @@
+<Window x:Class="ProcesadorCorreosPYS.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Procesador Correos PYS" Height="800" Width="1300">
+    <Grid Margin="10">
+        <TabControl>
+            <TabItem Header="Manual">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Fecha:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <DatePicker SelectedDate="{Binding FechaObjetivo}" Width="150" Margin="0,0,20,0"/>
+                        <Button Content="Procesar Ahora" Command="{Binding ProcesarAhoraCommand}" Margin="0,0,8,0"/>
+                        <Button Content="Limpiar" Command="{Binding LimpiarCommand}" Margin="0,0,8,0"/>
+                        <Button Content="Salir" Click="OnSalirClick"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Rango / Lista subcarpetas:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Text="{Binding RangoSubcarpetas}" Width="220" Margin="0,0,8,0"/>
+                        <Button Content="Generar Stickers" Command="{Binding GenerarStickersCommand}" Margin="0,0,8,0"/>
+                        <Button Content="Crear Excel" Command="{Binding CrearExcelCommand}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Carpeta offline:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Text="{Binding OfflineFolder}" Width="700" Margin="0,0,8,0"/>
+                        <Button Content="Extraer Correos" Command="{Binding ExtraerCorreosCommand}"/>
+                    </StackPanel>
+
+                    <GroupBox Grid.Row="3" Header="Resultado procesamiento" Margin="0,0,0,10">
+                        <DataGrid ItemsSource="{Binding Registros}" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="100"/>
+                                <DataGridTextColumn Header="Sticker" Binding="{Binding Sticker}" Width="130"/>
+                                <DataGridTextColumn Header="De" Binding="{Binding From}" Width="180"/>
+                                <DataGridTextColumn Header="Para" Binding="{Binding To}" Width="180"/>
+                                <DataGridTextColumn Header="Asunto" Binding="{Binding Subject}" Width="240"/>
+                                <DataGridTextColumn Header="Adjuntos" Binding="{Binding AttachmentCount}" Width="80"/>
+                                <DataGridTextColumn Header="Adjuntos Vacíos" Binding="{Binding EmptyAttachmentCount}" Width="100"/>
+                                <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="130"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="4" Header="Log manual">
+                        <ListBox ItemsSource="{Binding ManualLogs}"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Automático">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Estado:" FontWeight="Bold"/>
+                        <TextBlock Text=" " />
+                        <TextBlock Text="{Binding EstadoAutomatico}" />
+                        <TextBlock Text="    Ventana:" Margin="20,0,0,0" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding VentanaHoraria}"/>
+                        <TextBlock Text="    Fecha objetivo:" Margin="20,0,0,0" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding FechaObjetivo, StringFormat={}{0:yyyy-MM-dd}}"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="1" Content="Ejecutar Ciclo Ahora" HorizontalAlignment="Left" Padding="10,4" Command="{Binding EjecutarCicloAutomaticoCommand}" Margin="0,0,0,10"/>
+
+                    <GroupBox Grid.Row="2" Header="Log automático">
+                        <ListBox ItemsSource="{Binding AutomaticoLogs}"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Ayuda/Requerimientos">
+                <ScrollViewer Margin="10" VerticalScrollBarVisibility="Auto">
+                    <TextBlock TextWrapping="Wrap">
+Implementación orientada a salida productiva:
+- Integración EWS + OAuth MSAL (delegado/app-only por configuración).
+- Procesamiento manual/automático end-to-end.
+- Deduplicación primaria (processed_ids.txt) y secundaria (SHA256).
+- Estructura de carpetas operativas y reportes diarios incrementales CSV/Excel.
+- Generación HTML/PDF, stickers PDF y copia a BCS_IMG.
+- Persistencia de estados diarios y observabilidad con etiquetas (DUP, ATT, PDF, STICKER, FILE, WAIT).
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+app_config.xml
+src/ProcesadorCorreosPYS.Wpf/appsettings.json
