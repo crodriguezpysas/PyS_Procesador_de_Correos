@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddOptions<ProcessingOptions>().Bind(configuration.GetSection("Processing"));
 
         services.AddSingleton<IUniqueIdService, UniqueIdService>();
+        services.AddSingleton<IClock, SystemClock>();
         services.AddSingleton<IFileNameSanitizer, FileNameSanitizer>();
         services.AddSingleton<IFolderRangeParser, FolderRangeParser>();
         services.AddSingleton<IStateStore, FileStateStore>();

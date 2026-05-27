@@ -6,19 +6,26 @@ namespace ProcesadorCorreosPYS.Infrastructure.Services;
 
 public sealed class ExcelService : IExcelService
 {
+    private readonly IClock _clock;
+
+    public ExcelService(IClock clock)
+    {
+        _clock = clock;
+    }
+
     public ValueTask ExportResumenIncrementalAsync(string excelPath, IReadOnlyCollection<ProcessedEmailRecord> rows, CancellationToken cancellationToken = default)
     {
-        Export(excelPath, "Resumen", rows, false);
+        Export(excelPath, "Resumen", rows, false, _clock.Now);
         return ValueTask.CompletedTask;
     }
 
     public ValueTask ExportAlternativoIncrementalAsync(string excelPath, IReadOnlyCollection<ProcessedEmailRecord> rows, CancellationToken cancellationToken = default)
     {
-        Export(excelPath, "Automatico", rows, true);
+        Export(excelPath, "Automatico", rows, true, _clock.Now);
         return ValueTask.CompletedTask;
     }
 
-    private static void Export(string path, string sheetName, IReadOnlyCollection<ProcessedEmailRecord> rows, bool alternative)
+    private static void Export(string path, string sheetName, IReadOnlyCollection<ProcessedEmailRecord> rows, bool alternative, DateTimeOffset now)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         using var workbook = File.Exists(path) ? new XLWorkbook(path) : new XLWorkbook();
@@ -62,7 +69,7 @@ public sealed class ExcelService : IExcelService
             if (alternative)
             {
                 worksheet.Cell(rowIndex, 1).Value = row.Fecha.ToString("yyyy-MM-dd");
-                worksheet.Cell(rowIndex, 2).Value = DateTime.Now.ToString("HH:mm:ss");
+                worksheet.Cell(rowIndex, 2).Value = now.ToString("HH:mm:ss");
                 worksheet.Cell(rowIndex, 3).Value = row.Sticker;
                 worksheet.Cell(rowIndex, 4).Value = row.From;
                 worksheet.Cell(rowIndex, 5).Value = row.To;

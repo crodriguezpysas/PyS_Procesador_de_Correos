@@ -5,7 +5,7 @@ using QuestPDF.Infrastructure;
 
 namespace ProcesadorCorreosPYS.Infrastructure.Services;
 
-public sealed class StickerService : IStickerService
+public sealed class StickerService(IClock clock) : IStickerService
 {
     public ValueTask<string> GenerateStickerAsync(string stickerText, string outputPdfPath, CancellationToken cancellationToken = default)
     {
@@ -22,7 +22,7 @@ public sealed class StickerService : IStickerService
                 {
                     col.Item().Text("Procesador Correos PYS").Bold().FontSize(18);
                     col.Item().Text(stickerText).Bold().FontSize(24).FontColor(Colors.Blue.Darken2);
-                    col.Item().Text(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    col.Item().Text(clock.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 });
             });
         }).GeneratePdf(outputPdfPath);

@@ -6,7 +6,13 @@ namespace ProcesadorCorreosPYS.Infrastructure.Services;
 
 public sealed class CsvService : ICsvService
 {
+    private readonly IClock _clock;
     private const string Header = "Fecha|Hora|Sticker|De|Para|Asunto|Adjuntos|AdjuntosVacios|IncidenciasAdjuntos|RutaPdf|Status|MessageId|UniqueId|Consecutivo";
+    
+    public CsvService(IClock clock)
+    {
+        _clock = clock;
+    }
 
     public async ValueTask ExportIncrementalAsync(string csvPath, IReadOnlyCollection<ProcessedEmailRecord> rows, CancellationToken cancellationToken = default)
     {
@@ -41,7 +47,7 @@ public sealed class CsvService : ICsvService
 
             lines.Add(string.Join('|',
                 row.Fecha.ToString("yyyy-MM-dd"),
-                DateTime.Now.ToString("HH:mm:ss"),
+                _clock.Now.ToString("HH:mm:ss"),
                 Escape(row.Sticker),
                 Escape(row.From),
                 Escape(row.To),

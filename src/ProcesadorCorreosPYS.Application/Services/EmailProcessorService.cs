@@ -261,7 +261,7 @@ public sealed class EmailProcessorService(
             catch (Exception ex)
             {
                 incidents.Add($"Fallo adjunto {Path.GetFileName(targetPath)}: {ex.Message}");
-                logger.LogError(ex, "Error guardando adjunto {Attachment}", targetPath);
+                logger.LogError(ex, "Error guardando adjunto {Attachment}", Path.GetFileName(targetPath));
             }
         }
     }
